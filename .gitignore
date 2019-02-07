@@ -1,0 +1,11 @@
+venv
+*.pyc
+staticfiles
+.env
+
+# Python compiled files #
+__pycache__/
+
+# OS generated files #
+######################
+.DS_Store*
