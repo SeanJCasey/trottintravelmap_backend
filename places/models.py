@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 
 
@@ -28,3 +29,41 @@ class Place(models.Model):
 
     def __unicode__(self):
         return self.name
+
+
+class PlaceMap(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    places = models.ManyToManyField(Place)
+
+    @property
+    def continent_count(self):
+        return len(set(self.places.values_list('continent', flat=True)))
+
+    @property
+    def place_count(self):
+        return self.places.count()
+
+    @property
+    def place_percent(self):
+        return round(self.un_country_count / Country.objects.all().count() * 100)
+
+    @property
+    def region_count(self):
+        return len(set(self.places.values_list('region', flat=True)))
+
+    @property
+    def un_country_count(self):
+        return len(set(self.places.values_list('country', flat=True)))
+
+    @property
+    def un_country_area_percent(self):
+        from django.db.models import Sum
+        area_user = self.places.aggregate(Sum('area'))['area__sum']
+        area_total = Place.objects.all().aggregate(Sum('area'))['area__sum']
+        area_percent = 0
+        if area_user and area_total:
+            area_percent = area_user / area_total * 100
+        return round(area_percent)
+
+    def __unicode__(self):
+        return "<PlaceMap for %s>" % self.user
