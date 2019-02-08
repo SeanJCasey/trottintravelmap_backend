@@ -4,6 +4,8 @@ from django.contrib.auth.password_validation import validate_password, \
 
 from rest_framework import serializers
 
+from places.models import Place
+
 User = get_user_model()
 
 
@@ -27,3 +29,10 @@ class UserSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         return User.objects.create_user(
             validated_data['email'], validated_data['password'])
+
+
+class PlaceSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Place
+        fields = '__all__'

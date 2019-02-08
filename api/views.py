@@ -5,7 +5,9 @@ from django.contrib.auth import get_user_model
 from rest_framework import viewsets
 from rest_framework.permissions import AllowAny
 
-from .serializers import UserSerializer
+from places.models import Place
+
+from .serializers import PlaceSerializer, UserSerializer
 
 User = get_user_model()
 
@@ -20,3 +22,9 @@ class UserViewSet(viewsets.ModelViewSet):
             return []
 
         return User.objects.filter(email=self.request.user.email)
+
+
+class PlaceViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = PlaceSerializer
+    permission_classes = (AllowAny,)
+    queryset = Place.objects.all()
