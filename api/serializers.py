@@ -4,9 +4,32 @@ from django.contrib.auth.password_validation import validate_password, \
 
 from rest_framework import serializers
 
-from places.models import Place, PlaceMap
+from places.models import Country, Place, PlaceMap
 
 User = get_user_model()
+
+
+class PlaceCountrySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Country
+        exclude = ('name', 'code', 'continent')
+
+
+class PlaceSerializer(serializers.ModelSerializer):
+    country = PlaceCountrySerializer()
+
+    class Meta:
+        model = Place
+        fields = '__all__'
+
+
+class PlaceMapSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = PlaceMap
+        fields = ('id', 'user', 'places', 'continent_count', 'place_count',
+                  'place_percent', 'region_count', 'un_country_count',
+                  'un_country_area_percent')
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -29,19 +52,3 @@ class UserSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         return User.objects.create_user(
             validated_data['email'], validated_data['password'])
-
-
-class PlaceSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Place
-        fields = '__all__'
-
-
-class PlaceMapSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = PlaceMap
-        fields = ('id', 'user', 'places', 'continent_count', 'place_count',
-                  'place_percent', 'region_count', 'un_country_count',
-                  'un_country_area_percent')
