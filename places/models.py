@@ -32,7 +32,7 @@ class Place(models.Model):
 
 
 class PlaceMap(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     places = models.ManyToManyField(Place)
 
     @property
