@@ -33,7 +33,7 @@ class Place(models.Model):
 
 class PlaceMap(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    places = models.ManyToManyField(Place)
+    places = models.ManyToManyField(Place, blank=True)
 
     @property
     def continent_count(self):
