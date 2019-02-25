@@ -30,6 +30,41 @@ class PlaceMapSerializer(serializers.ModelSerializer):
         fields = ('id', 'user', 'places', 'continent_count', 'place_count',
                   'place_percent', 'region_count', 'un_country_count',
                   'un_country_area_percent')
+        read_only_fields = ('id', 'continent_count', 'place_count',
+                            'place_percent', 'region_count',
+                            'un_country_count', 'un_country_area_percent')
+
+
+    # def create(self, validated_data):
+    #     request = self.context.get('request')
+    #     user = request.user
+    #     places = validated_data['places']
+
+    #     placemap = PlaceMap.objects.create(user=user)
+    #     placemap.places.add()
+
+    #     return 
+    #         user=user,
+    #         )
+
+    #     if user != request.user:
+    #         raise serializers.ValidationError({
+    #             'user': 'User can only create placemap for self.'
+    #         })
+
+
+    # def validate(self, data):
+    #     user = data.get('user')
+
+    #     if user:
+    #         request = self.context.get('request')
+
+    #         if user != request.user:
+    #             raise serializers.ValidationError({
+    #                 'user': 'User can only create placemap for self.'
+    #             })
+
+    #     return super().validate(data)
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -37,8 +72,8 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('id', 'email', 'password')
-        read_only_fields = ('id',)
+        fields = ('id', 'email', 'password', 'placemap')
+        read_only_fields = ('id', 'placemap')
 
     def validate(self, data):
         password = data.get('password')

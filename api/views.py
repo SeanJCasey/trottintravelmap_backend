@@ -3,10 +3,11 @@ from django.shortcuts import render
 from django.contrib.auth import get_user_model
 
 from rest_framework import viewsets
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 
 from places.models import Place, PlaceMap
 
+from .permissions import IsOwnerOrReadOnly
 from .serializers import PlaceSerializer, PlaceMapSerializer, UserSerializer
 
 User = get_user_model()
@@ -32,6 +33,10 @@ class PlaceViewSet(viewsets.ReadOnlyModelViewSet):
 
 class PlaceMapViewSet(viewsets.ModelViewSet):
     serializer_class = PlaceMapSerializer
-    permission_classes = (AllowAny,)
-    queryset = PlaceMap.objects.filter(user__pk=1)
-    # queryset = PlaceMap.objects.filter(user=self.request.user)
+    queryset = PlaceMap.objects.all()
+
+    def get_permissions(self):
+        if self.request.method == 'POST':
+            return [IsAuthenticated()]
+        else:
+            return [IsOwnerOrReadOnly()]
