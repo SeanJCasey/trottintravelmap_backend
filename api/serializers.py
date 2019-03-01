@@ -23,7 +23,14 @@ class PlaceSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class PlaceMapUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('name',)
+
+
 class PlaceMapSerializer(serializers.ModelSerializer):
+    user = PlaceMapUserSerializer()
 
     class Meta:
         model = PlaceMap

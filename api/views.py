@@ -34,6 +34,7 @@ class PlaceViewSet(viewsets.ReadOnlyModelViewSet):
 class PlaceMapViewSet(viewsets.ModelViewSet):
     serializer_class = PlaceMapSerializer
     queryset = PlaceMap.objects.all()
+    lookup_field = 'user__slug'
 
     def get_permissions(self):
         if self.request.method == 'POST':
