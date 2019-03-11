@@ -30,16 +30,13 @@ class PlaceMapUserSerializer(serializers.ModelSerializer):
 
 
 class PlaceMapSerializer(serializers.ModelSerializer):
-    user = PlaceMapUserSerializer()
+    user = PlaceMapUserSerializer(read_only=True)
+    user_id = serializers.IntegerField(write_only=True)
 
     class Meta:
         model = PlaceMap
-        fields = ('id', 'user', 'places', 'continent_count', 'place_count',
-                  'place_percent', 'region_count', 'un_country_count',
-                  'un_country_area_percent')
-        read_only_fields = ('id', 'continent_count', 'place_count',
-                            'place_percent', 'region_count',
-                            'un_country_count', 'un_country_area_percent')
+        fields = ('user', 'user_id', 'places')
+        read_only_fields = ('user',)
 
 
 class UserSerializer(serializers.ModelSerializer):
