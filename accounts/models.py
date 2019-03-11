@@ -72,8 +72,6 @@ class CustomUser(AbstractBaseUser, TimeStampedModel, PermissionsMixin):
         return slug
 
     def save(self, *args, **kwargs):
-        print(self.slug)
-        print(slugify(self.name))
         if not self.slug:
             self.slug = self._generate_unique_slug()
 
