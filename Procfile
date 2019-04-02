@@ -1,1 +1,1 @@
-web: gunicorn trottintravelmap_backend.wsgi --log-file -
+web: gunicorn trottintravelmap.wsgi --log-file -
